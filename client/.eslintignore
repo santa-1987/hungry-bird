@@ -1,0 +1,6 @@
+node_modules
+coverage
+aggregated-translations
+translations.js
+default.js
+intl-enzyme-test-helper.js
