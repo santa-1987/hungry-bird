@@ -8,6 +8,8 @@ default: &default
   cache_path: tmp/cache/webpacker
   check_yarn_integrity: false
   webpack_compile_output: false
+  server:
+    hmr: false
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
@@ -57,7 +59,7 @@ development:
   check_yarn_integrity: true
 
   # Reference: https://webpack.js.org/configuration/dev-server/
-  dev_server:
+  server:
     https: false
     host: localhost
     port: 3035

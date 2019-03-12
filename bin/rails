@@ -1,4 +1,37 @@
 #!/usr/bin/env ruby
+
+# Returns the index of the first argument in the command line argument list (ARGV array) which equals one of the
+# given method arguments; otherwise, returns nil.
+# If a block is provided, yields the block if at least one of the arguments expected is found.
+def find_argument(*arguments)
+  index = ARGV.find_index { |element| arguments.include?(element) }
+  yield(index) if index && block_given?
+  index
+end
+
+# Returns the index of the first argument in the command line argument list (ARGV array) which equals one of the
+# given method arguments; otherwise, returns nil.
+# If a block is provided, yields the block if at least one of the arguments expected is found.
+# Also deletes the argument found.
+def find_argument!(*arguments, &block)
+  index = find_argument(*arguments, &block)
+  ARGV.delete_at(index) if index
+  index
+end
+
+# Support for server to be run with custom locale set
+find_argument!('-l', '--locale') do |index|
+  ENV['DEFAULT_LOCALE'] ||= ARGV[index + 1]
+  ARGV.delete_at(index + 1)
+  puts "=> Locale is set to #{ENV['DEFAULT_LOCALE']}"
+end
+
+# Only start up the webpack dev server if running the Rails server.
+# All other Rails commands will ignore the webpack initializer from running.
+find_argument('s', 'server') do |_index|
+  ENV['WEBPACK_DEV_SERVER'] ||= 'true'
+end
+
 begin
   load File.expand_path('../spring', __FILE__)
 rescue LoadError => e
